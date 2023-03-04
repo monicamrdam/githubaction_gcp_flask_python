@@ -1,0 +1,17 @@
+name: Hello World
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  Hello_World:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Hola Mundo
+        run: echo "Hola Mundo"
+      - name: Muestra la fecha
+        run: date
+      - run: ls -l
