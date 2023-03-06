@@ -49,12 +49,12 @@ jobs:
       - name: create firewall-rules
         run: gcloud compute --project=primerproyecto-flask firewall-rules create \
          rule-${{ github.sha }} \
-         --direction=INGRESS 
-         --priority=1000 
-         --network=default 
-         --action=ALLOW 
-         --rules=tcp:80 
-         --source-ranges=0.0.0.0/0 
+         --direction=INGRESS \
+         --priority=1000 \
+         --network=default \
+         --action=ALLOW \
+         --rules=tcp:80 \
+         --source-ranges=0.0.0.0/0 \
          --target-tags=red-tag
       # Borramos las VM que tenemos en google cloud
       - name: Delete VM
