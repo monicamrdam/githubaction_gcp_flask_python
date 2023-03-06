@@ -56,7 +56,7 @@ jobs:
         run: gcloud compute instances delete rick-and-morty-vm-${{ github.sha }} --zone=us-central1-a
       # Borramos la firewall-rules que hemos creado en google cloud
       - name: Delete firewall-rules
-        run: gcloud compute instances delete rule-${{ github.sha }}
+        run: gcloud compute firewall-rules delete rule-${{ github.sha }}
       # Listamos las VM que tenemos en google cloud
       - name: List VM
         run: gcloud compute instances list
