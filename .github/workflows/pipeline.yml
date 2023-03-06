@@ -33,3 +33,21 @@ jobs:
         uses: "google-github-actions/auth@v1"
         with:
           credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+     # Accedemos al sdk gcloud CLI
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+      # Listamos las VM que tenemos en google cloud
+      - name: List VM
+        run: gcloud compute instances list
+      #Creamos la VM
+      - name: Creamos VM
+        run: gcloud compute instances create rick-and-morty-vm-${{ github.sha }} --machine-type=n1-standard-1 --zone=us-central1-a
+      # Listamos las VM que tenemos en google cloud
+      - name: List VM
+        run: gcloud compute instances list
+      # Borramos las VM que tenemos en google cloud
+      - name: Delete VM
+        run: gcloud compute instances delete rick-and-morty-vm-${{ github.sha }} --zone=us-central1-a
+      # Listamos las VM que tenemos en google cloud
+      - name: List VM
+        run: gcloud compute instances list
