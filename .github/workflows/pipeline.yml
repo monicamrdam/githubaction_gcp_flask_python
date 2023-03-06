@@ -1,4 +1,4 @@
-name: Instalación de sistema operativo ubuntu
+name: Deployment Google Cloud
 
 on:
   push:
@@ -8,6 +8,7 @@ jobs:
   environment:
     runs-on: ubuntu-20.04
     steps:
+    # Actualización del código
       - name: Check-skip
         uses: actions/checkout@v3
         with:
@@ -15,3 +16,20 @@ jobs:
       - run: pwd
       - run: ls
       - run: ls -1
+
+  VM_google_cloud:
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      # Actualización del código
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Identificación en google cloud
+      - id: "auth"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
