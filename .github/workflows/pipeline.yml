@@ -47,10 +47,23 @@ jobs:
         run: gcloud compute instances list
         #Creamos la regla de firewall para el ssh
       - name: create firewall-rules
-        run: gcloud compute firewall-rules create rule-${{ github.sha }} --network rick-and-morty-vm-${{ github.sha }} --zone=us-central1-a --action allow  --direction egress --rules tcp:80 --destination-ranges 0.0.0.0/0 --priority 10 --enable-logging
+        run: gcloud compute --project=primerproyecto-flask firewall-rules create \
+         rule-${{ github.sha }} \
+         --direction=INGRESS 
+         --priority=1000 
+         --network=default 
+         --action=ALLOW 
+         --rules=tcp:80 
+         --source-ranges=0.0.0.0/0 
+         --target-tags=red-tag
       # Borramos las VM que tenemos en google cloud
       - name: Delete VM
         run: gcloud compute instances delete rick-and-morty-vm-${{ github.sha }} --zone=us-central1-a
       # Listamos las VM que tenemos en google cloud
       - name: List VM
         run: gcloud compute instances list
+
+
+
+
+        
