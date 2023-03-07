@@ -143,9 +143,13 @@ jobs:
      # Accedemos al sdk gcloud CLI
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
-      # Borramos la VM que hemos creado en google cloud
-      - name: Delete VM
-        run: gcloud compute instances delete rick-and-morty-vm-${{ github.sha }} --zone=us-central1-a
+      # Borramos las VM que hemos creado en google cloud
+      - name: Delete VM1
+        run: gcloud compute instances delete rick-and-morty-vm1 --zone=us-central1-a
+      - name: Delete VM2
+        run: gcloud compute instances delete rick-and-morty-vm2 --zone=us-central1-a
+      - name: Delete VM3
+        run: gcloud compute instances delete rick-and-morty-vm3 --zone=us-central1-a
       # Borramos la firewall-rules que hemos creado en google cloud
       - name: Delete firewall-rules
         run: gcloud compute firewall-rules delete rule-${{ github.sha }}
