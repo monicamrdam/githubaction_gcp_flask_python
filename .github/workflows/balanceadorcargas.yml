@@ -26,7 +26,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
       # Crea una dirección IP externa estática para tu balanceador de cargas.
       - name: IP externa estática
-        run: gcloud compute addresses create network-lb-ip-1 --region us-central1
+        run: gcloud compute addresses create network-lb-ip-2 --region us-central1
       # Agrega un recurso de verificación de estado HTTP heredado 
       - name: Verificiacion HTTP
         run: gcloud compute http-health-checks create basic-check
@@ -38,7 +38,7 @@ jobs:
         run: gcloud compute target-pools add-instances lbprueba --instances rick-and-morty-vm1,rick-and-morty-vm2,rick-and-morty-vm3 --instances-zone us-central1-b
       # Agrega una regla de reenvío
       - name: Regla de reenvio
-        run: gcloud compute forwarding-rules create www-rule --region us-central1 --ports 80 --address network-lb-ip-1 --target-pool lbprueba
+        run: gcloud compute forwarding-rules create www-rule --region us-central1 --ports 80 --address network-lb-ip-2 --target-pool lbprueba
       # Busca la dirección IP externa de la regla de reenvío
       - name: List IP externa
         run: gcloud compute forwarding-rules describe www-rule --region us-central1
