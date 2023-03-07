@@ -27,7 +27,22 @@ jobs:
       #Creamos la VM
       - name: Create VM
         run: gcloud compute instances create rick-and-morty-vm1 --machine-type=n1-standard-1 --zone=us-central1-a  --tags grupo-lb-proyectosprogramacion \
-  
+      #Desplegamos el proyecto Flask
+      - name: Actualizacmos sudo
+        run: gcloud compute ssh rick-and-morty-vm1 --zone=us-central1-a --command="sudo apt-get update"
+        #Instalamos git
+      - name: Instalamos git
+        run: gcloud compute ssh rick-and-morty-vm1--zone=us-central1-a --command="sudo apt-get install git -y"
+      - name: Clonamos el proyeccto
+        run: gcloud compute ssh rick-and-morty-vm1 --zone=us-central1-a --command="git clone https://github.com/monicamrdam/githubaction_gcp_flask_python.git"
+        #Listamos carpetas
+      - name: Listamos carpetas
+        run: gcloud compute ssh rick-and-morty-vm1 --zone=us-central1-a --command="ls ./spotifygitaction" 
+        #Instalamos la configuración en python
+      - name: Instalamos python, pip y venv
+        run: gcloud compute ssh rick-and-morty-vm1 --zone=us-central1-a --command="bash ./spotifygitaction/script/install-environment.sh && python3 -m venv ./spotifygitaction/venv && source ./spotifygitaction/venv/bin/activate &&  pip install -r ./spotifygitaction/requirements.txt &&  python3 ./spotifygitaction/main.py"
+
+
   VM_2_google_cloud:
     runs-on: ubuntu-20.04
     permissions:
