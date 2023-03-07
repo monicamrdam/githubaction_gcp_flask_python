@@ -26,7 +26,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
       #Creamos la VM
       - name: Create VM
-        run: gcloud compute instances create rick-and-morty-vm1 --machine-type=n1-standard-1 --zone=us-central1-a  --tags network-lb-tag \
+        run: gcloud compute instances create rick-and-morty-vm1 --machine-type=n1-standard-1 --zone=us-central1-a  --tags grupo-lb-proyectosprogramacion \
   
   VM_2_google_cloud:
     runs-on: ubuntu-20.04
@@ -49,7 +49,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
       #Creamos la VM
       - name: Create VM
-        run: gcloud compute instances create rick-and-morty-vm2 --machine-type=n1-standard-1 --zone=us-central1-a  --tags network-lb-tag \
+        run: gcloud compute instances create rick-and-morty-vm2 --machine-type=n1-standard-1 --zone=us-central1-a  --tags grupo-lb-proyectosprogramacion \
 
   VM_3_google_cloud:
     runs-on: ubuntu-20.04
@@ -72,7 +72,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
       #Creamos la VM
       - name: Create VM
-        run: gcloud compute instances create rick-and-morty-vm3 --machine-type=n1-standard-1 --zone=us-central1-a  --tags network-lb-tag \
+        run: gcloud compute instances create rick-and-morty-vm3 --machine-type=n1-standard-1 --zone=us-central1-a  --tags grupo-lb-proyectosprogramacion \
 
 
   Firewall-rules_google_cloud:
@@ -96,7 +96,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
        #Creamos la regla de firewall 
       - name: Create firewall-rules
-        run: gcloud compute --project=primerproyecto-flask firewall-rules create rule-${{ github.sha }} --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags network-lb-tag
+        run: gcloud compute --project=primerproyecto-flask firewall-rules create rule-${{ github.sha }} --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags grupo-lb-proyectosprogramacion
 
   List-google-cloud:
     runs-on: ubuntu-20.04
@@ -124,41 +124,5 @@ jobs:
       - name: List  firewall-rules
         run: gcloud compute  firewall-rules list
 
-  Load-balancing-google-cloud:
-    runs-on: ubuntu-20.04
-    permissions:
-      contents: "read"
-      id-token: "write"
-    steps:
-      # Actualización del código
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      # Identificación en google cloud
-      - id: "auth"
-        name: "Authenticate to Google Cloud"
-        uses: "google-github-actions/auth@v1"
-        with:
-          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
-     # Accedemos al sdk gcloud CLI
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-      # Crea una dirección IP externa estática para tu balanceador de cargas.
-      - name: IP externa estática
-        run: gcloud compute addresses create network-lb-ip-1 --region us-central1
-      # Agrega un recurso de verificación de estado HTTP heredado 
-      - name: Verificiacion HTTP
-        run: gcloud compute http-health-checks create basic-check
-      # Agrega un grupo de destino
-      - name: Grupo destino
-        run: gcloud compute target-pools create www-pool --region us-central1 --http-health-check basic-check
-      # Agrega tus instancias al grupo de destino.
-      - name: Instancias en grupo de destino
-        run: gcloud compute target-pools add-instances www-pool --instances rick-and-morty-vm1,rick-and-morty-vm2,rick-and-morty-vm3 --instances-zone us-central1-b
-      # Agrega una regla de reenvío
-      - name: Regla de reenvio
-        run: gcloud compute forwarding-rules create www-rule --region us-central1 --ports 80 --address network-lb-ip-1 --target-pool www-pool
-      # Busca la dirección IP externa de la regla de reenvío
-      - name: List IP externa
-        run: gcloud compute forwarding-rules describe www-rule --region us-central1
+
 
