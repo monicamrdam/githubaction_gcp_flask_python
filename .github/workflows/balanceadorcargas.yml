@@ -143,47 +143,22 @@ jobs:
      # Accedemos al sdk gcloud CLI
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
-      # Listamos las VM que tenemos en google cloud
-      - name: List VM
-        run: gcloud compute instances list
-      # Listamos las  firewall-rules que tenemos en google cloud
-      - name: List  firewall-rules
-        run: gcloud compute  firewall-rules list
-
-
-
-
-
-
-
-  Delete-google-cloud:
-    runs-on: ubuntu-20.04
-    permissions:
-      contents: "read"
-      id-token: "write"
-    steps:
-      # Actualización del código
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      # Identificación en google cloud
-      - id: "auth"
-        name: "Authenticate to Google Cloud"
-        uses: "google-github-actions/auth@v1"
-        with:
-          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
-     # Accedemos al sdk gcloud CLI
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-      # Borramos las VM que hemos creado en google cloud
-      - name: Delete VM1
-        run: gcloud compute instances delete rick-and-morty-vm1 --zone=us-central1-a
-      - name: Delete VM2
-        run: gcloud compute instances delete rick-and-morty-vm2 --zone=us-central1-a
-      - name: Delete VM3
-        run: gcloud compute instances delete rick-and-morty-vm3 --zone=us-central1-a
-      # Borramos la firewall-rules que hemos creado en google cloud
-      - name: Delete firewall-rules
-        run: gcloud compute firewall-rules delete rule-${{ github.sha }}
-
+      # Crea una dirección IP externa estática para tu balanceador de cargas.
+      - name: IP externa estática
+        run: gcloud compute addresses create network-lb-ip-1 --region us-central1
+      # Agrega un recurso de verificación de estado HTTP heredado 
+      - name: Verificiacion HTTP
+        run: gcloud compute http-health-checks create basic-check
+      # Agrega un grupo de destino
+      - name: Grupo destino
+        run: gcloud compute target-pools create www-pool --region us-central1 --http-health-check basic-check
+      # Agrega tus instancias al grupo de destino.
+      - name: Instancias en grupo de destino
+        run: gcloud compute target-pools add-instances www-pool --instances rick-and-morty-vm1,rick-and-morty-vm2,rick-and-morty-vm3 --instances-zone us-central1-b
+      # Agrega una regla de reenvío
+      - name: Regla de reenvio
+        run: gcloud compute forwarding-rules create www-rule --region us-central1 --ports 80 --address network-lb-ip-1 --target-pool www-pool
+      # Busca la dirección IP externa de la regla de reenvío
+      - name: List IP externa
+        run: gcloud compute forwarding-rules describe www-rule --region us-central1
 
