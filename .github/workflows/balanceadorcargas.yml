@@ -1,0 +1,153 @@
+name: Deployment Google Cloud
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  VM_1_google_cloud:
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      # Actualización del código
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Identificación en google cloud
+      - id: "auth"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+     # Accedemos al sdk gcloud CLI
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+      #Creamos la VM
+      - name: Create VM
+        run: gcloud compute instances create rick-and-morty-vm-${{ github.sha }} --machine-type=n1-standard-1 --zone=us-central1-a  --tags network-lb-tag \
+  
+  VM_2_google_cloud:
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      # Actualización del código
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Identificación en google cloud
+      - id: "auth"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+     # Accedemos al sdk gcloud CLI
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+      #Creamos la VM
+      - name: Create VM
+        run: gcloud compute instances create rick-and-morty-vm-${{ github.sha }} --machine-type=n1-standard-1 --zone=us-central1-a  --tags network-lb-tag \
+
+  VM_3_google_cloud:
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      # Actualización del código
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Identificación en google cloud
+      - id: "auth"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+     # Accedemos al sdk gcloud CLI
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+      #Creamos la VM
+      - name: Create VM
+        run: gcloud compute instances create rick-and-morty-vm-${{ github.sha }} --machine-type=n1-standard-1 --zone=us-central1-a  --tags network-lb-tag \
+
+
+  Firewall-rules_google_cloud:
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      # Actualización del código
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Identificación en google cloud
+      - id: "auth"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+     # Accedemos al sdk gcloud CLI
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+       #Creamos la regla de firewall 
+      - name: Create firewall-rules
+        run: gcloud compute --project=primerproyecto-flask firewall-rules create rule-${{ github.sha }} --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags network-lb-tag
+
+  List-google-cloud:
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      # Actualización del código
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Identificación en google cloud
+      - id: "auth"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+     # Accedemos al sdk gcloud CLI
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+      # Listamos las VM que tenemos en google cloud
+      - name: List VM
+        run: gcloud compute instances list
+      # Listamos las  firewall-rules que tenemos en google cloud
+      - name: List  firewall-rules
+        run: gcloud compute  firewall-rules list
+
+  Delete-google-cloud:
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      # Actualización del código
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Identificación en google cloud
+      - id: "auth"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+     # Accedemos al sdk gcloud CLI
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+      # Borramos la VM que hemos creado en google cloud
+      - name: Delete VM
+        run: gcloud compute instances delete rick-and-morty-vm-${{ github.sha }} --zone=us-central1-a
+      # Borramos la firewall-rules que hemos creado en google cloud
+      - name: Delete firewall-rules
+        run: gcloud compute firewall-rules delete rule-${{ github.sha }}
+
+
