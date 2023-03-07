@@ -29,10 +29,10 @@ jobs:
         run: gcloud compute addresses create network-lb-ip-2 --region us-central1
       # Agrega un recurso de verificación de estado HTTP heredado 
       - name: Verificiacion HTTP
-        run: gcloud compute http-health-checks create basic-check
+        run: gcloud compute http-health-checks create basic-check-2
       # Agrega un grupo de destino
       - name: Grupo destino
-        run: gcloud compute target-pools create lbprueba --region us-central1 --http-health-check basic-check
+        run: gcloud compute target-pools create lbprueba --region us-central1 --http-health-check basic-check-2
       # Agrega tus instancias al grupo de destino.
       - name: Instancias en grupo de destino
         run: gcloud compute target-pools add-instances lbprueba --instances rick-and-morty-vm1,rick-and-morty-vm2,rick-and-morty-vm3 --instances-zone us-central1-b
