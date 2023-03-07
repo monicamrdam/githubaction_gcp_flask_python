@@ -26,7 +26,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
       #Creamos la VM
       - name: Create VM
-        run: gcloud compute instances create rick-and-morty-vm-${{ github.sha }} --machine-type=n1-standard-1 --zone=us-central1-a  --tags network-lb-tag \
+        run: gcloud compute instances create rick-and-morty-vm1 --machine-type=n1-standard-1 --zone=us-central1-a  --tags network-lb-tag \
   
   VM_2_google_cloud:
     runs-on: ubuntu-20.04
@@ -49,7 +49,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
       #Creamos la VM
       - name: Create VM
-        run: gcloud compute instances create rick-and-morty-vm-${{ github.sha }} --machine-type=n1-standard-1 --zone=us-central1-a  --tags network-lb-tag \
+        run: gcloud compute instances create rick-and-morty-vm2 --machine-type=n1-standard-1 --zone=us-central1-a  --tags network-lb-tag \
 
   VM_3_google_cloud:
     runs-on: ubuntu-20.04
@@ -72,7 +72,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
       #Creamos la VM
       - name: Create VM
-        run: gcloud compute instances create rick-and-morty-vm-${{ github.sha }} --machine-type=n1-standard-1 --zone=us-central1-a  --tags network-lb-tag \
+        run: gcloud compute instances create rick-and-morty-vm3 --machine-type=n1-standard-1 --zone=us-central1-a  --tags network-lb-tag \
 
 
   Firewall-rules_google_cloud:
