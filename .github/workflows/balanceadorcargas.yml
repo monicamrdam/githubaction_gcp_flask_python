@@ -5,43 +5,7 @@ on:
     branches: ["main"]
 
 jobs:
-  Load-balancing-google-cloud:
-    runs-on: ubuntu-20.04
-    permissions:
-      contents: "read"
-      id-token: "write"
-    steps:
-      # Actualización del código
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      # Identificación en google cloud
-      - id: "auth"
-        name: "Authenticate to Google Cloud"
-        uses: "google-github-actions/auth@v1"
-        with:
-          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
-     # Accedemos al sdk gcloud CLI
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-      # Crea una dirección IP externa estática para tu balanceador de cargas.
-      - name: IP externa estática
-        run: gcloud compute addresses create network-lb-ip-2 --region us-central1
-      # Agrega un recurso de verificación de estado HTTP heredado 
-      - name: Verificiacion HTTP
-        run: gcloud compute http-health-checks create basic-check-2
-      # Agrega un grupo de destino
-      - name: Grupo destino
-        run: gcloud compute target-pools create lbprueba --region us-central1 --http-health-check basic-check-2
-      # Agrega tus instancias al grupo de destino.
-      - name: Instancias en grupo de destino
-        run: gcloud compute target-pools add-instances lbprueba --instances rick-and-morty-vm1,rick-and-morty-vm2,rick-and-morty-vm3 --instances-zone us-central1-b
-      # Agrega una regla de reenvío
-      - name: Regla de reenvio
-        run: gcloud compute forwarding-rules create www-rule --region us-central1 --ports 80 --address network-lb-ip-2 --target-pool lbprueba
-      # Busca la dirección IP externa de la regla de reenvío
-      - name: List IP externa
-        run: gcloud compute forwarding-rules describe www-rule --region us-central1
+ 
 
   VM_1_google_cloud:
     runs-on: ubuntu-20.04
@@ -64,7 +28,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
       #Creamos la VM
       - name: Create VM
-        run: gcloud compute instances create rick-and-morty-vm1 --machine-type=n1-standard-1 --zone=us-central1-a  --tags grupo-lb-proyectosprogramacion \
+        run: gcloud compute instances create rick-and-morty-vm1 --machine-type=n1-standard-1 --zone=us-central1-a  --tags lbprueba3
       #Desplegamos el proyecto Flask
       - name: Actualizacmos sudo
         run: gcloud compute ssh rick-and-morty-vm1 --zone=us-central1-a --command="sudo apt-get update"
