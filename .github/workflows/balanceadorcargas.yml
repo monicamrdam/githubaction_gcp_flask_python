@@ -32,7 +32,7 @@ jobs:
         run: gcloud compute ssh rick-and-morty-vm1 --zone=us-central1-a --command="sudo apt-get update"
         #Instalamos git
       - name: Instalamos git
-        run: gcloud compute ssh rick-and-morty-vm1--zone=us-central1-a --command="sudo apt-get install git -y"
+        run: gcloud compute ssh rick-and-morty-vm1 --zone=us-central1-a --command="sudo apt-get install git -y"
       - name: Clonamos el proyeccto
         run: gcloud compute ssh rick-and-morty-vm1 --zone=us-central1-a --command="git clone https://github.com/monicamrdam/githubaction_gcp_flask_python.git"
         #Listamos carpetas
