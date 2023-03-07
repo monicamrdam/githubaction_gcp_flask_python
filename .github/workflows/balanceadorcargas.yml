@@ -124,6 +124,38 @@ jobs:
       - name: List  firewall-rules
         run: gcloud compute  firewall-rules list
 
+  Load-balancing-google-cloud:
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: "read"
+      id-token: "write"
+    steps:
+      # Actualización del código
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Identificación en google cloud
+      - id: "auth"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.GOOGLE_CREDENTIALS }}"
+     # Accedemos al sdk gcloud CLI
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+      # Listamos las VM que tenemos en google cloud
+      - name: List VM
+        run: gcloud compute instances list
+      # Listamos las  firewall-rules que tenemos en google cloud
+      - name: List  firewall-rules
+        run: gcloud compute  firewall-rules list
+
+
+
+
+
+
+
   Delete-google-cloud:
     runs-on: ubuntu-20.04
     permissions:
