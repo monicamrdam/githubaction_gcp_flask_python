@@ -66,7 +66,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
       #Creamos la VM
       - name: Create VM
-        run: gcloud compute instances create rick-and-morty-vm2 --machine-type=n1-standard-1 --zone=us-central1-a  --tags grupo-lb-proyectosprogramacion \
+        run: gcloud compute instances create rick-and-morty-vm2 --machine-type=n1-standard-1 --zone=us-central1-a  --tags lbprueba3
 
   VM_3_google_cloud:
     runs-on: ubuntu-20.04
@@ -89,7 +89,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
       #Creamos la VM
       - name: Create VM
-        run: gcloud compute instances create rick-and-morty-vm3 --machine-type=n1-standard-1 --zone=us-central1-a  --tags grupo-lb-proyectosprogramacion \
+        run: gcloud compute instances create rick-and-morty-vm3 --machine-type=n1-standard-1 --zone=us-central1-a  --tags lbprueba3
 
 
   Firewall-rules_google_cloud:
@@ -113,7 +113,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1
        #Creamos la regla de firewall 
       - name: Create firewall-rules
-        run: gcloud compute --project=primerproyecto-flask firewall-rules create rule-${{ github.sha }} --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags grupo-lb-proyectosprogramacion
+        run: gcloud compute --project=primerproyecto-flask firewall-rules create rule-${{ github.sha }} --direction=INGRESS --priority=1000 --network=default --action=ALLOW --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags lbprueba3
 
   List-google-cloud:
     runs-on: ubuntu-20.04
