@@ -8,7 +8,7 @@ class CharacterRepository:
 
     @staticmethod
     def get_db():
-        DATABASE_URI='../app/db_RAndM_Spotify.db'
+        DATABASE_URI='./app/db_RAndM_Spotify.db'
         conn = sql.connect(DATABASE_URI)
         return conn
 
